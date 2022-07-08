@@ -58,7 +58,7 @@ class Command(BaseCommand):
                 count_mismatch += 1
                 continue
 
-            convo = Conversation(name=f'{path_en.name}:{convo_idx}', date_added=timezone.now())
+            convo = Conversation(name=f'dialogre/{path_en.name}/{convo_idx}', date_added=timezone.now())
             sents = []
             mismatched = False
 
@@ -74,6 +74,7 @@ class Command(BaseCommand):
 
                 sent = Sentence(
                     conversation=convo,
+                    name=f'{convo.name}/{sent_idx}',
                     speaker=m_en.group(1),
                     index=sent_idx,
                     text_en=m_en.group(2),

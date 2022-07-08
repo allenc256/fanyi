@@ -9,6 +9,7 @@ class Conversation(models.Model):
 
 class Sentence(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
     index = models.IntegerField()
     speaker = models.CharField(max_length=256)
     text_en = models.CharField('text (english)', max_length=4096)
@@ -17,4 +18,4 @@ class Sentence(models.Model):
     text_cn_pinyin = models.CharField('text (pinyin)', max_length=4096)
 
     def __str__(self):
-        return f'{self.speaker}: {self.text_en}'
+        return f'{self.name}'
