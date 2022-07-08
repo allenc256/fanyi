@@ -29,22 +29,13 @@
     </div>    
     {% endfor %}
 </div>
-<!-- <table>
 
-    <tr>
-        <td class="sent_speaker">
-        </td>
-        <td class="sent_contents">
-            <div class="text_en">
-                {{ sent.text_en }}
-            </div>
-            <div class="text_cn">
-                {{ sent.text_cn_traditional }}
-            </div>
-            <div class="text_pinyin">
-                {{ sent.text_cn_pinyin }}
-            </div>
-            </td>
-    </tr>
-</table>
- -->
+<a href="{% url 'practice:convo_first' %}">First</a>
+{% if prev_convo_id %}
+    <a href="{% url 'practice:convo' prev_convo_id %}">Prev</a>
+{% endif %}
+{% if next_convo_id %}
+    <a href="{% url 'practice:convo' next_convo_id %}">Next</a>
+{% endif %}
+<a href="{% url 'practice:convo_last' %}">Last</a>
+<a href="{% url 'practice:convo_random' %}">Random</a>

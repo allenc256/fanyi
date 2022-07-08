@@ -1,10 +1,9 @@
-.speaker {
-    font-weight: bold;
-    color: green;
+body {
+    margin-left: 1em;
 }
 
-.speaker-col {
-    padding-left: 1em;
+.speaker {
+    font-weight: bold;
 }
 
 .content-col {
