@@ -11,12 +11,15 @@ class ConvoView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        next = Conversation.objects.only('pk').filter(pk__gt=context['convo'].pk).order_by('pk').first()
+        convo = context['convo']
+        next = Conversation.objects.only('pk').filter(pk__gt=convo.pk).order_by('pk').first()
         if next:
             context['next_convo_id'] = next.pk
-        prev = Conversation.objects.only('pk').filter(pk__lt=context['convo'].pk).order_by('-pk').first()
+        prev = Conversation.objects.only('pk').filter(pk__lt=convo.pk).order_by('-pk').first()
         if prev:
             context['prev_convo_id'] = prev.pk
+        convo.view_count += 1
+        convo.save()
         return context
 
 def convo_random(request):

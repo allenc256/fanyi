@@ -30,12 +30,16 @@
     {% endfor %}
 </div>
 
-<a href="{% url 'practice:convo_first' %}">First</a>
+<a class="btn btn-info" href="{% url 'practice:convo_first' %}">First</a>
 {% if prev_convo_id %}
-    <a href="{% url 'practice:convo' prev_convo_id %}">Prev</a>
+    <a class="btn btn-info" href="{% url 'practice:convo' prev_convo_id %}">Prev</a>
 {% endif %}
 {% if next_convo_id %}
-    <a href="{% url 'practice:convo' next_convo_id %}">Next</a>
+    <a class="btn btn-info" href="{% url 'practice:convo' next_convo_id %}">Next</a>
 {% endif %}
-<a href="{% url 'practice:convo_last' %}">Last</a>
-<a href="{% url 'practice:convo_random' %}">Random</a>
+<a class="btn btn-info" href="{% url 'practice:convo_last' %}">Last</a>
+<a class="btn btn-info" href="{% url 'practice:convo_random' %}">Random</a>
+
+<div class="view-count">
+    Times viewed: {{ convo.view_count }}
+</div>
