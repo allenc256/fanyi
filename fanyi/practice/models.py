@@ -1,7 +1,11 @@
 from django.db import models
 
 class Conversation(models.Model):
+    name = models.CharField(max_length=256)
     date_added = models.DateTimeField()
+
+    def __str__(self):
+        return f'{self.name}'
 
 class Sentence(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
