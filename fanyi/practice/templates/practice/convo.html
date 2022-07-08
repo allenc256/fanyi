@@ -1,0 +1,50 @@
+{% include "./common.html" %}
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'practice/convo.css' %}">
+
+<h1>{{ convo.name }}</h1>
+<div class="container-fluid">
+    {% for sent in convo.sentence_set.all %}
+    <div class="row">
+        <div class="speaker-col col-1-auto speaker">
+            {{ sent.speaker }}:
+        </div>
+        <div class="content-col col">
+            <div id="heading-{{ sent.id }}">
+                <button class="text_en btn-link" data-toggle="collapse" data-target="#collapse-{{ sent.id }}" aria-expanded="false" aria-controls="collapse-{{ sent.id }}">
+                    {{ sent.text_en }}
+                </button>
+            </div>
+            <div id="collapse-{{ sent.id }}" class="collapse" aria-labelledby="heading-{{ sent.id }}">
+                <div class="text_cn">
+                    {{ sent.text_cn_traditional }}
+                </div>
+                <div class="text_pinyin">
+                    {{ sent.text_cn_pinyin }}
+                </div>
+            </div>
+        </div>
+    </div>    
+    {% endfor %}
+</div>
+<!-- <table>
+
+    <tr>
+        <td class="sent_speaker">
+        </td>
+        <td class="sent_contents">
+            <div class="text_en">
+                {{ sent.text_en }}
+            </div>
+            <div class="text_cn">
+                {{ sent.text_cn_traditional }}
+            </div>
+            <div class="text_pinyin">
+                {{ sent.text_cn_pinyin }}
+            </div>
+            </td>
+    </tr>
+</table>
+ -->

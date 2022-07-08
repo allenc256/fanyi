@@ -1,0 +1,27 @@
+.speaker {
+    font-weight: bold;
+    color: green;
+}
+
+.speaker-col {
+    padding-left: 1em;
+}
+
+.content-col {
+    padding-bottom: 1em;
+}
+
+.text_en {
+    padding: 0;
+    border: none;
+    background: none;
+    text-align: left;
+}
+
+.text_en:focus {
+    outline: 0;
+}
+
+.text_cn {
+    font-size: 150%;
+}
