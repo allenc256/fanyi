@@ -1,6 +1,13 @@
 body {
-    margin-left: 1em;
+    margin: 1em 1em 1em 1em;
 }
+
+.speaker-0 { color: red; }
+.speaker-1 { color: green; }
+.speaker-2 { color: blue; }
+.speaker-3 { color: orange; }
+.speaker-4 { color: purple; }
+.speaker-5 { color: teal; }
 
 .speaker {
     font-weight: bold;

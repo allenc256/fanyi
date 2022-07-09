@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.views import generic
+from django.utils import timezone
 from random import choice
 
 from .models import Conversation
@@ -12,15 +13,35 @@ class ConvoView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         convo = context['convo']
+
         next = Conversation.objects.only('pk').filter(pk__gt=convo.pk).order_by('pk').first()
         if next:
             context['next_convo_id'] = next.pk
         prev = Conversation.objects.only('pk').filter(pk__lt=convo.pk).order_by('-pk').first()
         if prev:
             context['prev_convo_id'] = prev.pk
-        convo.view_count += 1
+
+        sents = sorted(convo.sentence_set.all(), key=lambda sent: sent.index)
+        speaker_idxs = {}
+        for sent in sents:
+            if sent.speaker not in speaker_idxs:
+                speaker_idxs[sent.speaker] = len(speaker_idxs)
+            sent.speaker_idx = speaker_idxs[sent.speaker]
+        context['sents'] = sents
+
+        context['date_viewed'] = convo.date_viewed
+        convo.date_viewed = timezone.now()
         convo.save()
+
         return context
+
+class RecentView(generic.list.ListView):
+    template_name = 'practice/recent.html'
+    model = Conversation
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Conversation.objects.filter(date_viewed__isnull=False).order_by('-date_viewed').all()
 
 def convo_random(request):
     all_ids = Conversation.objects.values_list('pk', flat=True)

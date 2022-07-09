@@ -1,0 +1,26 @@
+{% extends "./base.html" %}
+
+{% load static %}
+
+{% block title %}Recent Conversations{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'practice/recent.css' %}">
+{% endblock %}
+
+{% block body %}
+    <h1>Recent Conversations</h1>
+
+    <div class="container-fluid">
+        {% for convo in page_obj %}
+        <div class="row">
+            <div class="date-viewed-col col-3-auto">
+                {{ convo.date_viewed }}
+            </div>
+            <div class="name-col col">
+                <a href="{% url 'practice:convo' convo.id %}">{{ convo.name }}</a>
+            </div>
+        </div>    
+        {% endfor %}
+    </div>
+{% endblock %}
