@@ -3,7 +3,7 @@ from django.views import generic
 from django.utils import timezone
 from random import choice
 
-from .models import Conversation
+from .models import Conversation, Transcript, Entry
 
 class ConvoView(generic.DetailView):
     template_name = 'practice/convo.html'
@@ -55,3 +55,29 @@ def convo_first(request):
 def convo_last(request):
     last = Conversation.objects.order_by('-pk').first()
     return redirect(f'/practice/convo/{last.pk}/')
+
+class IndexView(generic.list.ListView):
+    template_name = 'practice/index.html'
+    model = Transcript
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Transcript.objects.filter(last_viewed__isnull=False).order_by('-last_viewed').all()
+
+class TranscriptView(generic.list.ListView):
+    template_name = 'practice/transcript.html'
+    model = Entry
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Entry.objects.filter(transcript=self.kwargs['transcript_pk']).order_by('index').all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        transcript = Transcript.objects.get(pk=self.kwargs['transcript_pk'])
+        context['transcript'] = transcript
+        context['last_viewed'] = transcript.last_viewed
+        transcript.last_viewed = timezone.now()
+        transcript.save()
+        return context
+

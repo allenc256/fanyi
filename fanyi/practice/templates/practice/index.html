@@ -1,0 +1,26 @@
+{% extends "./base.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}Practice{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'practice/index.css' %}">
+{% endblock %}
+
+{% block body %}
+    <h1>Recent Transcripts</h1>
+    <div class="container-fluid">
+        {% for transcript in page_obj %}
+        <div class="row">
+            <div class="last-viewed-col col-1-auto">
+                {{ transcript.last_viewed | naturaltime }}
+            </div>
+            <div class="col">
+                <a href="{% url 'practice:transcript' transcript.pk %}">{{ transcript.title }}</a>
+            </div>
+        </div>    
+        {% endfor %}
+    </div>
+{% endblock %}
