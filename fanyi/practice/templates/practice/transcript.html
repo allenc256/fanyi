@@ -12,14 +12,35 @@
 
 {% block body %}
     <h1>{{ transcript.title }}</h1>
-    <div class="container-fluid">
+    <table>
+        <tr>
+            <td class="metadata-header">Author</td>
+            <td>{{ transcript.author }}</td>
+        </tr>
+        <tr>
+            <td class="metadata-header">URL</td>
+            <td><a href="{{ transcript.url }}">{{ transcript.url }}</td>
+        </tr>
+        <tr>
+            <td class="metadata-header">Date published</td>
+            <td>{{ transcript.date_published }}</td>
+        </tr>
+        <tr>
+            <td class="metadata-header">Last viewed</td>
+            <td>{{ last_viewed | naturaltime }}</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Index</th>
+            <th>Timestamp</th>
+            <th>Text</th>
+        </tr>
         {% for entry in page_obj %}
-            <div class="row">
-                <div class="col-1-auto">
-                    <span class="entry-index">{{ entry.index | add:"1" }}</span>
-                    <span class="entry-timestamp">({{ entry.start_ms | format_millis }})</span>
-                </div>
-                <div class="col content-col">
+            <tr>
+                <td>{{ entry.index | add:"1" }}</td>
+                <td>{{ entry.start_ms | format_millis }}</td>
+                <td>
                     <div id="heading-{{ entry.index }}">
                         <button class="text_en btn-link" data-toggle="collapse" data-target="#collapse-{{ entry.index }}" aria-expanded="false" aria-controls="collapse-{{ entry.index }}">
                             {{ entry.text_en }}
@@ -33,11 +54,10 @@
                             {{ entry.text_cn_pinyin }}
                         </div>
                     </div>
-                </div>
-            </div>    
+                </td>
+            </tr>
         {% endfor %}
-    </div>
-
+    </table>
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
@@ -55,10 +75,4 @@
             {% endif %}
         </span>
     </div>
-
-    {% if last_viewed %}
-        <div class="last-viewed">
-            Transcript last viewed: {{ last_viewed | naturaltime }}
-        </div>
-    {% endif %}
 {% endblock %}

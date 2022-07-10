@@ -2,16 +2,17 @@ body {
     margin: 1em 1em 1em 1em;
 }
 
-.entry-index {
+.metadata-header {
     font-weight: bold;
 }
 
-.entry-timestamp {
-    font-weight: lighter;
+tr td:first-child, th:first-child {
+    padding-left: 0em;
 }
 
-.content-col {
-    padding-bottom: 1em;
+td, th {
+    padding-left: 1em;
+    vertical-align: top;
 }
 
 .text_en {

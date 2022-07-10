@@ -61,8 +61,10 @@ class IndexView(generic.list.ListView):
     model = Transcript
     paginate_by = 20
 
-    def get_queryset(self):
-        return Transcript.objects.filter(last_viewed__isnull=False).order_by('-last_viewed').all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recent'] = Transcript.objects.filter(last_viewed__isnull=False).order_by('-last_viewed')[:10]
+        return context
 
 class TranscriptView(generic.list.ListView):
     template_name = 'practice/transcript.html'
