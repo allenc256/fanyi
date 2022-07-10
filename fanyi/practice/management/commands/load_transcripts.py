@@ -4,7 +4,7 @@ from django.utils.dateparse import parse_date
 from django.db import transaction
 from pathlib import Path
 from tqdm import tqdm
-from practice.models import Transcript
+from practice.models import Transcript, Translation
 
 class Command(BaseCommand):
     help = 'loads transcript JSON into the database'
@@ -32,12 +32,18 @@ class Command(BaseCommand):
                 transcript.save()
 
                 for entry_idx, entry_json in enumerate(transcript_json['entries']):
-                    transcript.entry_set.create(
+                    entry = transcript.entry_set.create(
                         index=entry_idx,
                         start_ms=entry_json.get('start_ms'),
                         end_ms=entry_json.get('end_ms'),
                         text_en=entry_json.get('text_en'),
-                        text_cn_traditional=entry_json.get('text_cn_traditional'),
-                        text_cn_simplified=entry_json.get('text_cn_simplified'),
-                        text_cn_pinyin=entry_json.get('text_cn_pinyin'),
                     )
+
+                    for translation_idx, translation_json in enumerate(entry_json['translations']):
+                        entry.translation_set.create(
+                            index=translation_idx,
+                            source=translation_json['source'],
+                            text_cn_traditional=translation_json['text_cn_traditional'],
+                            text_cn_simplified=translation_json['text_cn_simplified'],
+                            text_cn_pinyin=translation_json['text_cn_pinyin'],
+                        )

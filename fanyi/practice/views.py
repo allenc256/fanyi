@@ -72,7 +72,10 @@ class TranscriptView(generic.list.ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Entry.objects.filter(transcript=self.kwargs['transcript_pk']).order_by('index').all()
+        return Entry.objects.filter(transcript=self.kwargs['transcript_pk']) \
+            .order_by('index') \
+            .all() \
+            .prefetch_related('translation_set')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

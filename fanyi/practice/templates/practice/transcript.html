@@ -47,12 +47,19 @@
                         </button>
                     </div>
                     <div id="collapse-{{ entry.index }}" class="collapse" aria-labelledby="heading-{{ entry.index }}">
-                        <div class="text_cn">
-                            {{ entry.text_cn_traditional }}
-                        </div>
-                        <div class="text_pinyin">
-                            {{ entry.text_cn_pinyin }}
-                        </div>
+                        <table>
+                            {% for translation in entry.translation_set.all %}
+                                <span class="text_cn">
+                                    {{ translation.text_cn_traditional }}
+                                </span>
+                                <span class="source">
+                                    ({{ translation.source | capfirst}})
+                                </span>
+                                <div class="text_pinyin">
+                                    {{ translation.text_cn_pinyin }}
+                                </div>
+                            {% endfor %}
+                        </table>
                     </div>
                 </td>
             </tr>
