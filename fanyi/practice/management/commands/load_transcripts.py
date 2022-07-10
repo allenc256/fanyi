@@ -4,7 +4,7 @@ from django.utils.dateparse import parse_date
 from django.db import transaction
 from pathlib import Path
 from tqdm import tqdm
-from practice.models import Transcript, Translation
+from practice.models import Transcript
 
 class Command(BaseCommand):
     help = 'loads transcript JSON into the database'
