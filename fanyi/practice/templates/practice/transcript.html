@@ -35,6 +35,7 @@
             <th>Index</th>
             <th>Timestamp</th>
             <th>Text</th>
+            <th>Notes</th>
         </tr>
         {% for entry in page_obj %}
             <tr>
@@ -61,6 +62,9 @@
                             {% endfor %}
                         </table>
                     </div>
+                </td>
+                <td>
+                    <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+"}}</a>
                 </td>
             </tr>
         {% endfor %}

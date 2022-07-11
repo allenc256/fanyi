@@ -16,7 +16,8 @@ class Entry(models.Model):
     index = models.IntegerField()
     start_ms = models.IntegerField('start (ms)', null=True)
     end_ms = models.IntegerField('end (ms)', null=True)
-    text_en = models.CharField('text (english)', max_length=4096)
+    text_en = models.TextField('text (english)')
+    notes = models.TextField('notes', null=True, blank=True)
 
     class Meta:
         ordering = ['index']
@@ -31,9 +32,9 @@ class Translation(models.Model):
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     index = models.IntegerField()
     source = models.CharField(max_length=256)
-    text_cn_traditional = models.CharField('text (traditional)', max_length=4096)
-    text_cn_simplified = models.CharField('text (simplified)', max_length=4096, null=True)
-    text_cn_pinyin = models.CharField('text (pinyin)', max_length=4096)
+    text_cn_traditional = models.TextField('text (traditional)')
+    text_cn_simplified = models.TextField('text (simplified)', null=True)
+    text_cn_pinyin = models.TextField('text (pinyin)')
 
     class Meta:
         ordering = ['index']

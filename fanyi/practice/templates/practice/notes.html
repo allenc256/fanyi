@@ -1,0 +1,55 @@
+{% extends "./base.html" %}
+
+{% load static %}
+{% load format_millis %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'practice/transcript.css' %}">
+{% endblock %}
+
+{% block title %}Notes{% endblock %}
+
+{% block body %}
+    <h1>Notes</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="metadata-header">Index:</td>
+                <td>{{ entry.index }}</td>
+            </tr>
+            <tr>
+                <td class="metadata-header">Timestamp:</td>
+                <td>{{ entry.start_ms | format_millis }}</td>
+            </tr>
+            <tr>
+                <td class="metadata-header">Text:</td>
+                <td>{{ entry.text_en }}</td>
+            </tr>
+            {% for translation in entry.translation_set.all %}
+                <tr>
+                    <td class="metadata-header">Translation {{ translation.index | add:"1" }}:</td>
+                    <td>
+                        <span class="text_cn">
+                            {{ translation.text_cn_traditional }}
+                        </span>
+                        <span class="source">
+                            ({{ translation.source | capfirst}})
+                        </span>
+                        <div class="text_pinyin">
+                            {{ translation.text_cn_pinyin }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="metadata-header">Notes:</td>
+                <td>
+                    {{ form.notes.errors }}
+                    {{ form.notes }}
+                </td>
+            </tr>
+        </table>
+        <input class="btn btn-info" type="submit" value="Submit">
+    </form>
+{% endblock %}

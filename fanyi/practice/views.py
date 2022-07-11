@@ -1,6 +1,6 @@
 from django.views import generic
 from django.utils import timezone
-from random import choice
+from django.urls import reverse
 
 from .models import Transcript, Entry
 
@@ -33,3 +33,11 @@ class TranscriptView(generic.list.ListView):
         transcript.last_viewed = timezone.now()
         transcript.save()
         return context
+
+class NotesView(generic.edit.UpdateView):
+    template_name = 'practice/notes.html'
+    model = Entry
+    fields = ['notes']
+
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse('practice:index'))
