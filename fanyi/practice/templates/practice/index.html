@@ -16,8 +16,10 @@
         <tr>
             <th>Last viewed</th>
             <th>Author</th>
-            <th>Date published</th>
             <th>Title</th>
+            <th>Date published</th>
+            <th>Entries</th>
+            <th>Notes</th>
         </tr>
         {% for transcript in recent %}
             <tr>
@@ -28,12 +30,17 @@
                     {{ transcript.author }}
                 </td>
                 <td>
+                    <a href="{% url 'practice:transcript' transcript.pk %}">{{ transcript.title }}</a>
+                </td>
+                <td>
                     {{ transcript.date_published }}
                 </td>
                 <td>
-                    <a href="{% url 'practice:transcript' transcript.pk %}">{{ transcript.title }}</a>
+                    {{ transcript.entry_count }}
                 </td>
-                </div>
+                <td>
+                    {{ transcript.note_count }}
+                </td>
             </tr>    
         {% endfor %}
     </table>
@@ -42,8 +49,10 @@
         <tr>
             <th>Last viewed</th>
             <th>Author</th>
-            <th>Date published</th>
             <th>Title</th>
+            <th>Date published</th>
+            <th>Entries</th>
+            <th>Notes</th>
         </tr>
         {% for transcript in page_obj %}
             <tr>
@@ -54,12 +63,17 @@
                     {{ transcript.author }}
                 </td>
                 <td>
+                    <a href="{% url 'practice:transcript' transcript.pk %}">{{ transcript.title }}</a>
+                </td>
+                <td>
                     {{ transcript.date_published }}
                 </td>
                 <td>
-                    <a href="{% url 'practice:transcript' transcript.pk %}">{{ transcript.title }}</a>
+                    {{ transcript.entry_count }}
                 </td>
-                </div>
+                <td>
+                    {{ transcript.note_count }}
+                </td>
             </tr>    
         {% endfor %}
     </table>

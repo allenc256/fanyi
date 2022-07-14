@@ -12,6 +12,17 @@
 
 {% block body %}
     <h1>{{ transcript.title }}</h1>
+    <div class="pagination">
+        <span class="step-links">
+            {% if transcript_prev %}
+                <a href="{% url 'practice:transcript' transcript_prev.pk %}">&laquo; previous</a>
+            {% endif %}
+            <a href="{% url 'practice:index' %}">index</a>
+            {% if transcript_next %}
+                <a href="{% url 'practice:transcript' transcript_next.pk %}">next &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
     <table>
         <tr>
             <td class="metadata-header">Author</td>
@@ -64,7 +75,7 @@
                     </div>
                 </td>
                 <td>
-                    <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+"}}</a>
+                    <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+" | linebreaksbr }}</a>
                 </td>
             </tr>
         {% endfor %}
