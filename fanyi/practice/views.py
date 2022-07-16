@@ -28,8 +28,10 @@ class TranscriptView(generic.list.ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Entry.objects.filter(transcript=self.kwargs['transcript_pk']) \
-            .order_by('index') \
+        qs = Entry.objects.filter(transcript=self.kwargs['transcript_pk'])
+        if self._is_notes_only():
+            qs = qs.filter(Q(notes__isnull=False) & ~Q(notes=''))
+        return qs.order_by('index') \
             .all() \
             .prefetch_related('translation_set')
 
@@ -45,10 +47,16 @@ class TranscriptView(generic.list.ListView):
             .filter(pk__lt=self.kwargs['transcript_pk']) \
             .order_by('-pk') \
             .first()
+        context['notes_only'] = self._is_notes_only()
+        context['notes_only_toggle'] = not context['notes_only']
         context['last_viewed'] = transcript.last_viewed
         transcript.last_viewed = timezone.now()
         transcript.save()
         return context
+
+    def _is_notes_only(self):
+        return self.request.GET.get('notes_only', '').lower() in ('t', 'true')
+
 
 class NotesView(generic.edit.UpdateView):
     template_name = 'practice/notes.html'

@@ -15,6 +15,10 @@ td, th {
     vertical-align: top;
 }
 
+.empty-content {
+    font-style: italic;
+}
+
 .source {
     font-style: italic;
 }

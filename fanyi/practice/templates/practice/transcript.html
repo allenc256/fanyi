@@ -40,51 +40,59 @@
             <td class="metadata-header">Last viewed</td>
             <td>{{ last_viewed | naturaltime }}</td>
         </tr>
-    </table>
-    <table>
         <tr>
-            <th>Index</th>
-            <th>Timestamp</th>
-            <th>Text</th>
-            <th>Notes</th>
+            <td class="metadata-header">Notes only</td>
+            <td><a href="?page={{ page_obj.number }}&notes_only={{ notes_only_toggle }}">{{ notes_only }}</a></td>
         </tr>
-        {% for entry in page_obj %}
-            <tr>
-                <td>{{ entry.index | add:"1" }}</td>
-                <td>{{ entry.start_ms | format_millis }}</td>
-                <td>
-                    <div id="heading-{{ entry.index }}">
-                        <button class="text_en btn-link" data-toggle="collapse" data-target="#collapse-{{ entry.index }}" aria-expanded="false" aria-controls="collapse-{{ entry.index }}">
-                            {{ entry.text_en }}
-                        </button>
-                    </div>
-                    <div id="collapse-{{ entry.index }}" class="collapse" aria-labelledby="heading-{{ entry.index }}">
-                        <table>
-                            {% for translation in entry.translation_set.all %}
-                                <span class="text_cn">
-                                    {{ translation.text_cn_traditional }}
-                                </span>
-                                <span class="source">
-                                    ({{ translation.source | capfirst}})
-                                </span>
-                                <div class="text_pinyin">
-                                    {{ translation.text_cn_pinyin }}
-                                </div>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </td>
-                <td>
-                    <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+" | linebreaksbr }}</a>
-                </td>
-            </tr>
-        {% endfor %}
     </table>
+    {% if page_obj %}
+        <table>
+            <tr>
+                <th>Index</th>
+                <th>Timestamp</th>
+                <th>Text</th>
+                <th>Notes</th>
+            </tr>
+            {% for entry in page_obj %}
+                <tr>
+                    <td>{{ entry.index | add:"1" }}</td>
+                    <td>{{ entry.start_ms | format_millis }}</td>
+                    <td>
+                        <div id="heading-{{ entry.index }}">
+                            <button class="text_en btn-link" data-toggle="collapse" data-target="#collapse-{{ entry.index }}" aria-expanded="false" aria-controls="collapse-{{ entry.index }}">
+                                {{ entry.text_en }}
+                            </button>
+                        </div>
+                        <div id="collapse-{{ entry.index }}" class="collapse" aria-labelledby="heading-{{ entry.index }}">
+                            <table>
+                                {% for translation in entry.translation_set.all %}
+                                    <span class="text_cn">
+                                        {{ translation.text_cn_traditional }}
+                                    </span>
+                                    <span class="source">
+                                        ({{ translation.source | capfirst}})
+                                    </span>
+                                    <div class="text_pinyin">
+                                        {{ translation.text_cn_pinyin }}
+                                    </div>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+" | linebreaksbr }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="empty-content">No matching entries.</div>
+    {% endif %}
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?page=1&notes_only={{ notes_only }}">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}&notes_only={{ notes_only }}">previous</a>
             {% endif %}
 
             <span class="current">
@@ -92,8 +100,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&notes_only={{ notes_only }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&notes_only={{ notes_only }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>
