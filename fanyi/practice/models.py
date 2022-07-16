@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 class Transcript(models.Model):
     title = models.CharField(max_length=256)
@@ -12,12 +13,18 @@ class Transcript(models.Model):
         return self.title
 
 class Entry(models.Model):
+    class Difficulty(models.IntegerChoices):
+        EASY = 1, _('Easy')
+        MEDIUM = 2, _('Medium')
+        HARD = 3, _('Hard')
+
     transcript = models.ForeignKey(Transcript, on_delete=models.CASCADE)
     index = models.IntegerField()
     start_ms = models.IntegerField('start (ms)', null=True)
     end_ms = models.IntegerField('end (ms)', null=True)
     text_en = models.TextField('text (english)')
     notes = models.TextField('notes', null=True, blank=True)
+    difficulty = models.IntegerField(choices=Difficulty.choices, null=True, blank=True)
 
     class Meta:
         ordering = ['index']

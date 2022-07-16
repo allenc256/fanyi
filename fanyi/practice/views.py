@@ -61,7 +61,7 @@ class TranscriptView(generic.list.ListView):
 class NotesView(generic.edit.UpdateView):
     template_name = 'practice/notes.html'
     model = Entry
-    fields = ['notes']
+    fields = ['notes', 'difficulty']
 
     def get_success_url(self):
         return self.request.GET.get('next', reverse('practice:index'))

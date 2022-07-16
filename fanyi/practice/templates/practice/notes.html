@@ -43,6 +43,13 @@
                 </tr>
             {% endfor %}
             <tr>
+                <td class="metadata-header">Difficulty:</td>
+                <td>
+                    {{ form.difficulty.errors }}
+                    {{ form.difficulty }}
+                </td>
+            </tr>
+            <tr>
                 <td class="metadata-header">Notes:</td>
                 <td>
                     {{ form.notes.errors }}
