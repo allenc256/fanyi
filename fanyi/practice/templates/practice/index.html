@@ -19,6 +19,9 @@
             <th>Title</th>
             <th>Date published</th>
             <th>Entries</th>
+            <th>Easy</th>
+            <th>Medium</th>
+            <th>Hard</th>
             <th>Notes</th>
         </tr>
         {% for transcript in recent %}
@@ -39,6 +42,15 @@
                     {{ transcript.entry_count }}
                 </td>
                 <td>
+                    {{ transcript.easy_count }}
+                </td>
+                <td>
+                    {{ transcript.medium_count }}
+                </td>
+                <td>
+                    {{ transcript.hard_count }}
+                </td>
+                <td>
                     {{ transcript.note_count }}
                 </td>
             </tr>    
@@ -52,6 +64,9 @@
             <th>Title</th>
             <th>Date published</th>
             <th>Entries</th>
+            <th>Easy</th>
+            <th>Medium</th>
+            <th>Hard</th>
             <th>Notes</th>
         </tr>
         {% for transcript in page_obj %}
@@ -70,6 +85,15 @@
                 </td>
                 <td>
                     {{ transcript.entry_count }}
+                </td>
+                <td>
+                    {{ transcript.easy_count }}
+                </td>
+                <td>
+                    {{ transcript.medium_count }}
+                </td>
+                <td>
+                    {{ transcript.hard_count }}
                 </td>
                 <td>
                     {{ transcript.note_count }}

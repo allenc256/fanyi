@@ -12,12 +12,18 @@ class IndexView(generic.list.ListView):
 
     def get_queryset(self):
         return Transcript.objects.annotate(entry_count=Count('entry')) \
-            .annotate(note_count=Count('entry', filter=Q(entry__notes__isnull=False) & ~Q(entry__notes='')))
+            .annotate(note_count=Count('entry', filter=Q(entry__notes__isnull=False) & ~Q(entry__notes=''))) \
+            .annotate(easy_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.EASY))) \
+            .annotate(medium_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.MEDIUM))) \
+            .annotate(hard_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.HARD)))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['recent'] = Transcript.objects.annotate(entry_count=Count('entry')) \
             .annotate(note_count=Count('entry', filter=Q(entry__notes__isnull=False) & ~Q(entry__notes=''))) \
+            .annotate(easy_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.EASY))) \
+            .annotate(medium_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.MEDIUM))) \
+            .annotate(hard_count=Count('entry', filter=Q(entry__difficulty=Entry.Difficulty.HARD))) \
             .filter(last_viewed__isnull=False) \
             .order_by('-last_viewed')[:10]
         return context
