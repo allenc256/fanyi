@@ -31,12 +31,16 @@ class TranscriptView(generic.list.ListView):
         qs = Entry.objects.filter(transcript=self.kwargs['transcript_pk'])
         if self._is_notes_only():
             qs = qs.filter(Q(notes__isnull=False) & ~Q(notes=''))
+        min_difficulty = self._min_difficulty()
+        if min_difficulty > 0:
+            qs = qs.filter(Q(difficulty__gte=min_difficulty))
         return qs.order_by('index') \
             .all() \
             .prefetch_related('translation_set')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         transcript = Transcript.objects.get(pk=self.kwargs['transcript_pk'])
         context['transcript'] = transcript
         context['transcript_next'] = Transcript.objects.only('pk') \
@@ -47,15 +51,24 @@ class TranscriptView(generic.list.ListView):
             .filter(pk__lt=self.kwargs['transcript_pk']) \
             .order_by('-pk') \
             .first()
+
         context['notes_only'] = self._is_notes_only()
         context['notes_only_toggle'] = not context['notes_only']
+
+        context['difficulties'] = Entry.Difficulty.choices
+        context['min_difficulty'] = self._min_difficulty()
+
         context['last_viewed'] = transcript.last_viewed
         transcript.last_viewed = timezone.now()
         transcript.save()
+
         return context
 
     def _is_notes_only(self):
         return self.request.GET.get('notes_only', '').lower() in ('t', 'true')
+
+    def _min_difficulty(self):
+        return int(self.request.GET.get('min_difficulty', 0))
 
 
 class NotesView(generic.edit.UpdateView):

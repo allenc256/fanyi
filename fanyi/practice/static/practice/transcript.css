@@ -15,6 +15,10 @@ td, th {
     vertical-align: top;
 }
 
+.min-difficulty {
+    font-style: italic;
+}
+
 .empty-content {
     font-style: italic;
 }

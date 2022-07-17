@@ -14,6 +14,7 @@ class Transcript(models.Model):
 
 class Entry(models.Model):
     class Difficulty(models.IntegerChoices):
+        NONE = 0, _('None')
         EASY = 1, _('Easy')
         MEDIUM = 2, _('Medium')
         HARD = 3, _('Hard')
@@ -24,7 +25,7 @@ class Entry(models.Model):
     end_ms = models.IntegerField('end (ms)', null=True)
     text_en = models.TextField('text (english)')
     notes = models.TextField('notes', null=True, blank=True)
-    difficulty = models.IntegerField(choices=Difficulty.choices, null=True, blank=True)
+    difficulty = models.IntegerField(choices=Difficulty.choices, default=Difficulty.NONE)
 
     class Meta:
         ordering = ['index']

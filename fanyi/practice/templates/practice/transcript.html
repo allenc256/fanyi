@@ -25,24 +25,36 @@
     </div>
     <table>
         <tr>
-            <td class="metadata-header">Author</td>
+            <td class="metadata-header">Author:</td>
             <td>{{ transcript.author }}</td>
         </tr>
         <tr>
-            <td class="metadata-header">URL</td>
+            <td class="metadata-header">URL:</td>
             <td><a href="{{ transcript.url }}">{{ transcript.url }}</td>
         </tr>
         <tr>
-            <td class="metadata-header">Date published</td>
+            <td class="metadata-header">Date published:</td>
             <td>{{ transcript.date_published }}</td>
         </tr>
         <tr>
-            <td class="metadata-header">Last viewed</td>
+            <td class="metadata-header">Last viewed:</td>
             <td>{{ last_viewed | naturaltime }}</td>
         </tr>
         <tr>
-            <td class="metadata-header">Show only w/ notes</td>
-            <td><a href="?notes_only={{ notes_only_toggle | lower }}">{{ notes_only }}</a></td>
+            <td class="metadata-header">Min difficulty:</td>
+            <td>
+                {% for difficulty in difficulties %}
+                    {% if min_difficulty == difficulty.0 %}
+                        <span class="min-difficulty">{{ difficulty.1 }}</span>
+                    {% else %}
+                        <a href="?notes_only={{ notes_only_toggle | lower }}&min_difficulty={{ difficulty.0 }}">{{ difficulty.1 }}</a>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td class="metadata-header">Show only w/ notes:</td>
+            <td><a href="?notes_only={{ notes_only_toggle | lower }}&min_difficulty={{ min_difficulty }}">{{ notes_only }}</a></td>
         </tr>
     </table>
     {% if page_obj %}
@@ -95,8 +107,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1&notes_only={{ notes_only | lower }}">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&notes_only={{ notes_only | lower }}">previous</a>
+                <a href="?page=1&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">previous</a>
             {% endif %}
 
             <span class="current">
@@ -104,8 +116,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&notes_only={{ notes_only | lower }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&notes_only={{ notes_only | lower }}">last &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>
