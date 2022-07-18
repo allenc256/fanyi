@@ -1,13 +1,8 @@
 {% extends "./base.html" %}
 
-{% load static %}
 {% load humanize %}
 
 {% block title %}Practice{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'practice/index.css' %}">
-{% endblock %}
 
 {% block body %}
     <h1>Transcripts</h1>
@@ -19,9 +14,7 @@
             <th>Title</th>
             <th>Date published</th>
             <th>Entries</th>
-            <th>Easy</th>
-            <th>Medium</th>
-            <th>Hard</th>
+            <th>Vocab</th>
             <th>Notes</th>
         </tr>
         {% for transcript in recent %}
@@ -42,13 +35,7 @@
                     {{ transcript.entry_count }}
                 </td>
                 <td>
-                    {{ transcript.easy_count }}
-                </td>
-                <td>
-                    {{ transcript.medium_count }}
-                </td>
-                <td>
-                    {{ transcript.hard_count }}
+                    {{ transcript.vocab_count }}
                 </td>
                 <td>
                     {{ transcript.note_count }}
@@ -64,9 +51,7 @@
             <th>Title</th>
             <th>Date published</th>
             <th>Entries</th>
-            <th>Easy</th>
-            <th>Medium</th>
-            <th>Hard</th>
+            <th>Vocab</th>
             <th>Notes</th>
         </tr>
         {% for transcript in page_obj %}
@@ -87,13 +72,7 @@
                     {{ transcript.entry_count }}
                 </td>
                 <td>
-                    {{ transcript.easy_count }}
-                </td>
-                <td>
-                    {{ transcript.medium_count }}
-                </td>
-                <td>
-                    {{ transcript.hard_count }}
+                    {{ transcript.vocab_count }}
                 </td>
                 <td>
                     {{ transcript.note_count }}

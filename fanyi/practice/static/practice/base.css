@@ -15,11 +15,20 @@ td, th {
     vertical-align: top;
 }
 
+.error {
+    color: red;
+    font-weight: bold;
+}
+
 .min-difficulty {
     font-style: italic;
 }
 
 .empty-content {
+    font-style: italic;
+}
+
+.vocab-phrase {
     font-style: italic;
 }
 

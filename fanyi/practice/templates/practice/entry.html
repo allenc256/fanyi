@@ -1,0 +1,125 @@
+{% extends "./base.html" %}
+
+{% load format_millis %}
+{% load humanize %}
+
+{% block body %}
+    <h1>Entry</h1>
+    <form id="edit_form">
+        {% csrf_token %}
+        <input type="hidden" id="next" name="next" value="{{ request.GET.next }}">
+        <input type="hidden" name="form" value="edit_form">
+        <table>
+            <tr>
+                <td class="metadata-header">Index:</td>
+                <td>{{ entry.index | add:"1" }}</td>
+            </tr>
+            <tr>
+                <td class="metadata-header">Text:</td>
+                <td>{{ entry.text_en }}</td>
+            </tr>
+            {% for translation in entry.translation_set.all %}
+                <tr>
+                    <td class="metadata-header">Translation {{ translation.index | add:"1" }}:</td>
+                    <td>
+                        <span class="text_cn">
+                            {{ translation.text_cn_traditional }}
+                        </span>
+                        <span class="source">
+                            ({{ translation.source | capfirst}})
+                        </span>
+                        <div class="text_pinyin">
+                            {{ translation.text_cn_pinyin }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="metadata-header">Difficulty:</td>
+                <td>
+                    {{ edit_form.difficulty.errors }}
+                    {{ edit_form.difficulty }}
+                </td>
+            </tr>
+            <tr>
+                <td class="metadata-header">Notes:</td>
+                <td>
+                    {{ edit_form.notes.errors }}
+                    {{ edit_form.notes }}
+                </td>
+            </tr>
+        </table>
+        <input class="btn btn-primary btn-sm" type="submit" formmethod="post" formaction="{% url 'practice:entry' entry.pk %}?next={{ request.GET.next | urlencode }}" value="Save">
+        {% if request.GET.next %}
+            <a class="btn btn-primary btn-sm" href="{{ request.GET.next }}">Cancel</a>
+        {% endif %}
+    </form>
+    <h3>Vocab</h3>
+    <form id="vocab_form">
+        {% csrf_token %}
+        <input type="hidden" id="next" name="next" value="{{ request.get_full_path | urlencode }}">
+        <input type="hidden" name="form" value="vocab_form">
+        <table>
+            <tr>
+                <th>Phrase</th>
+                <th>Translation</th>
+                <th>Last modified</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    {{ vocab_form.phrase.errors }}
+                    {{ vocab_form.phrase }}
+                </td>
+                <td>
+                    {{ vocab_form.translation.errors }}
+                    {{ vocab_form.translation }}
+                </td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>
+                    <input class="btn btn-primary btn-sm" id="search" type="submit" formmethod="get" value="Search">
+                    <input class="btn btn-primary btn-sm" type="submit" formmethod="post" value="Create">
+                </td>
+            </tr>
+            {% for vocab in entry.vocab_set.all %}
+                <tr>
+                    <td><span class="vocab-phrase">"{{ vocab.phrase }}":</span></td>
+                    <td><span class="vocab-translation">{{ vocab.translation }}</span></td>
+                    <td>{{ vocab.time_last_modified | naturaltime }}</td>
+                    <td>{{ vocab.time_created | naturaltime }}</td>
+                    <td>
+                        <input class="btn btn-primary btn-sm" type="submit" formmethod="post" formaction="{% url 'practice:vocab_remove' entry.pk vocab.pk %}?next={{ request.get_full_path | urlencode }}" value="Remove">
+                        <a class="btn btn-primary btn-sm" href="{% url 'practice:vocab_edit' vocab.pk %}?next={{ request.get_full_path | urlencode }}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for vocab in matches %}
+                <tr>
+                    <td><span class="vocab-phrase">"{{ vocab.phrase }}":</span></td>
+                    <td><span class="vocab-translation">{{ vocab.translation }}</span></td>
+                    <td>{{ vocab.time_last_modified | naturaltime }}</td>
+                    <td>{{ vocab.time_created | naturaltime }}</td>
+                    <td>
+                        <input class="btn btn-primary btn-sm" type="submit" formmethod="post" formaction="{% url 'practice:vocab_add' entry.pk vocab.pk %}?next={{ request.get_full_path | urlencode }}" value="Add">
+                        <a class="btn btn-primary btn-sm" href="{% url 'practice:vocab_edit' vocab.pk %}?next={{ request.get_full_path | urlencode }}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% for error in vocab_form.non_field_errors %}
+            <div class="error">Error: {{ error | escape }}</div>
+        {% endfor %}
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $("#vocab_form").submit(function (event) {
+            if (event.originalEvent.submitter.id === "search") {
+                $(this).children("input[name='csrfmiddlewaretoken']").remove()
+            }
+        });
+    </script>
+{% endblock %}

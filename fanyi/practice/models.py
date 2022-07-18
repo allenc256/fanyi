@@ -14,7 +14,7 @@ class Transcript(models.Model):
 
 class Entry(models.Model):
     class Difficulty(models.IntegerChoices):
-        NONE = 0, _('None')
+        NONE = 0, _('-')
         EASY = 1, _('Easy')
         MEDIUM = 2, _('Medium')
         HARD = 3, _('Hard')
@@ -46,3 +46,13 @@ class Translation(models.Model):
 
     class Meta:
         ordering = ['index']
+
+class Vocab(models.Model):
+    phrase = models.TextField()
+    translation = models.TextField()
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_last_modified = models.DateTimeField(auto_now_add=True)
+    entries = models.ManyToManyField(Entry)
+
+    class Meta:
+        ordering = ['-time_last_modified']

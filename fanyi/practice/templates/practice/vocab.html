@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+
+{% block body %}
+    <h1>Vocab</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="metadata-header">Phrase:</td>
+                <td>
+                    {{ form.phrase.errors }}
+                    {{ form.phrase }}
+                </td>
+            </tr>
+            <tr>
+                <td class="metadata-header">Translation:</td>
+                <td>
+                    {{ form.translation.errors }}
+                    {{ form.translation }}
+                </td>
+            </tr>
+        </table>
+        <input class="btn btn-primary btn-sm" type="submit" value="Save">
+    </form>
+{% endblock %}

@@ -1,14 +1,9 @@
 {% extends "./base.html" %}
 
-{% load static %}
 {% load format_millis %}
 {% load humanize %}
 
 {% block title %}{{ transcript.title }}{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'practice/transcript.css' %}">
-{% endblock %}
 
 {% block body %}
     <h1>{{ transcript.title }}</h1>
@@ -40,22 +35,6 @@
             <td class="metadata-header">Last viewed:</td>
             <td>{{ last_viewed | naturaltime }}</td>
         </tr>
-        <tr>
-            <td class="metadata-header">Min difficulty:</td>
-            <td>
-                {% for difficulty in difficulties %}
-                    {% if min_difficulty == difficulty.0 %}
-                        <span class="min-difficulty">{{ difficulty.1 }}</span>
-                    {% else %}
-                        <a href="?notes_only={{ notes_only_toggle | lower }}&min_difficulty={{ difficulty.0 }}">{{ difficulty.1 }}</a>
-                    {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td class="metadata-header">Show only w/ notes:</td>
-            <td><a href="?notes_only={{ notes_only_toggle | lower }}&min_difficulty={{ min_difficulty }}">{{ notes_only }}</a></td>
-        </tr>
     </table>
     {% if page_obj %}
         <table>
@@ -63,8 +42,10 @@
                 <th>Index</th>
                 <th>Timestamp</th>
                 <th>Text</th>
+                <th>Vocab</th>
                 <th>Difficulty</th>
                 <th>Notes</th>
+                <th></th>
             </tr>
             {% for entry in page_obj %}
                 <tr>
@@ -93,10 +74,20 @@
                         </div>
                     </td>
                     <td>
-                        <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.get_difficulty_display | default:"+" }}</a>
+                        {% if entry.vocab_set.all %}
+                            {% for vocab in entry.vocab_set.all %}
+                                <div>
+                                    "<span class="vocab-phrase">{{ vocab.phrase }}</span>": <span class="vocab-translation">{{ vocab.translation }}</span>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
                     </td>
+                    <td>{{ entry.get_difficulty_display | default:"-" }}</td>
+                    <td>{{ entry.notes | default:"-" | linebreaksbr }}</td>
                     <td>
-                        <a href="{% url 'practice:notes' entry.pk %}?next={{ request.get_full_path | urlencode }}">{{ entry.notes | default:"+" | linebreaksbr }}</a>
+                        <a href="{% url 'practice:entry' entry.pk %}?next={{ request.get_full_path | urlencode }}">Edit</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -107,8 +98,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">previous</a>
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
             {% endif %}
 
             <span class="current">
@@ -116,8 +107,8 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&notes_only={{ notes_only | lower }}&min_difficulty={{ min_difficulty }}">last &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>
