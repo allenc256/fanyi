@@ -57,7 +57,7 @@
     <h3>Vocab</h3>
     <form id="vocab_form">
         {% csrf_token %}
-        <input type="hidden" id="next" name="next" value="{{ request.get_full_path | urlencode }}">
+        <input type="hidden" id="next" name="next" value="{{ request.GET.next }}">
         <input type="hidden" name="form" value="vocab_form">
         <table>
             <tr>
