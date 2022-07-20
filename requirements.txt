@@ -1,4 +1,3 @@
 django
-opencc
-pypinyin
 tqdm
+gunicorn
